@@ -2,7 +2,7 @@ package com.three.kidult.model.dto;
 
 import java.util.Date;
 
-public class ProductboardDto {
+public class ProductboardDto extends PagingDto {
 	
 	private int productboard_no;
 	private String id;

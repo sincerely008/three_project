@@ -9,10 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.three.kidult.model.biz.ProductboardBiz;
+import com.three.kidult.model.dto.PagingDto;
+import com.three.kidult.model.dto.ProductboardDto;
 
 /**
  * Handles requests for the application home page.
@@ -44,8 +47,14 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/test.do", method = RequestMethod.GET)
-	public String test(Model model) {
+	public String test(Model model, @ModelAttribute("ProductboardDto")ProductboardDto productboardDto) {
+		// 검색조건, 검색어
+		logger.info("SearchFiled : " + productboardDto.getSearchFiled());
+		logger.info("SearchValue : " + productboardDto.getSearchValue());
 		
+		// 페이징 처리
+		int totalCount  = http://blog.naver.com/PostView.nhn?blogId=bleu1234&logNo=220263432986
+	
 		model.addAttribute("list", ProductboardBiz.boardList());
 		
 		return "border";

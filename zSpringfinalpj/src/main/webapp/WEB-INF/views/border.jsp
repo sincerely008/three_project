@@ -40,6 +40,7 @@
 		</c:choose>
 		
 	</table>
+	
 
 </body>
 </html>
