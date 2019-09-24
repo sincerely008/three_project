@@ -15,33 +15,45 @@ public class ProductboardBizImpl implements ProductboardBiz {
 	private ProductboardDao dao;
 	
 	@Override
-	public List<ProductboardDto> boardList() {
+	public List<ProductboardDto> boardList(int offset, int noOfRecords) {
 		
-		return dao.boardList();
+		return dao.boardList(offset, noOfRecords);
 	}
 
 	@Override
 	public ProductboardDto selectBoard() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return dao.selectBoard();
 	}
 
 	@Override
 	public int insertBoard(ProductboardDto dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return dao.insertBoard(dto);
 	}
 
 	@Override
 	public int updateBoard(ProductboardDto dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return dao.updateBoard(dto);
 	}
 
 	@Override
 	public int deleteBoard(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return dao.deleteBoard(id);
+	}
+
+	@Override
+	public int getNoOfRecords() {
+		
+		return dao.getNoOfRecords();
+	}
+
+	@Override
+	public List<ProductboardDto> searchFiled(int offset, int noOfRecords, String searchFiled, String searchValue) {
+		
+		return dao.searchFiled(offset, noOfRecords, searchFiled, searchValue);
 	}
 
 }

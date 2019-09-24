@@ -2,14 +2,16 @@ package com.three.kidult;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -23,14 +25,20 @@ import com.three.kidult.model.dto.ProductboardDto;
 @Controller
 public class HomeController {
 	
+	@Autowired
+	private ProductboardBiz biz;
+	
+	int currentPageNo = 1;
+	int recordsPerPage = 0;
+	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
 	
-	@Autowired
-	private ProductboardBiz ProductboardBiz;
+	
+	
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
@@ -47,15 +55,54 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/test.do", method = RequestMethod.GET)
-	public String test(Model model, @ModelAttribute("ProductboardDto")ProductboardDto productboardDto) {
-		// 검색조건, 검색어
-		logger.info("SearchFiled : " + productboardDto.getSearchFiled());
-		logger.info("SearchValue : " + productboardDto.getSearchValue());
+	public String test(Model model, HttpServletRequest request) {
 		
-		// 페이징 처리
-		int totalCount  = http://blog.naver.com/PostView.nhn?blogId=bleu1234&logNo=220263432986
+		
+		
+		if(request.getParameter("pages") != null) {
+			currentPageNo = Integer.parseInt(request.getParameter("pages"));
+		}
+		if(request.getParameter("lines") != null) {
+			recordsPerPage = Integer.parseInt(request.getParameter("lines"));
+		}
+		
+		PagingDto paging = new PagingDto(recordsPerPage, currentPageNo);
+		int offset = (paging.getCurrentPageNo() - 1) * paging.getRecordsPerPage();
+		
+		
+		List<ProductboardDto> list = biz.boardList(offset, paging.getRecordsPerPage());
+		paging.setNumberOfRecords(biz.getNoOfRecords());
+		paging.makePaging();
+		model.addAttribute("list", list);
+		model.addAttribute("paging", paging);
+		
+		return "border";
+	}
 	
-		model.addAttribute("list", ProductboardBiz.boardList());
+	@RequestMapping("/paging.do")
+	public String paging(Model model, HttpServletRequest request) {
+		
+		if(request.getParameter("pages") != null) {
+			currentPageNo = Integer.parseInt(request.getParameter("pages"));
+		}
+		if(request.getParameter("lines") != null) {
+			recordsPerPage = Integer.parseInt(request.getParameter("lines"));
+		}
+		
+		String searchFiled = request.getParameter("searchFiled");
+		String searchValue = request.getParameter("searchValue");
+		
+		PagingDto paging = new PagingDto(recordsPerPage, currentPageNo);
+		int offset = (paging.getCurrentPageNo() - 1) * paging.getRecordsPerPage();
+		
+		List<ProductboardDto> list = biz.searchFiled(offset, paging.getRecordsPerPage(), searchFiled, searchValue);
+		paging.setSearchFiled(searchFiled);
+		paging.setSearchValue(searchValue);
+		paging.setNumberOfRecords(biz.getNoOfRecords());
+		paging.makePaging();
+		
+		model.addAttribute("list", list);
+		model.addAttribute("paging", paging);
 		
 		return "border";
 	}
