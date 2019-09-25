@@ -11,7 +11,7 @@
 <script type="text/javascript">
 
 	function goPage(pages, lines) {
-	    var url = "&pages=" + pages + "&lines=" + lines;
+	    var url = "?pages=" + pages + "&lines=" + lines;
 	    var searchFiled = "${paging.searchFiled}";
 	    var searchValue = "${paging.searchValue}";
 	    	url += "&searchFiled=" + searchFiled + "&searchValue=" + searchValue;

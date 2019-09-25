@@ -31,6 +31,8 @@ public class HomeController {
 	int currentPageNo = 1;
 	int recordsPerPage = 0;
 	
+	
+	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	/**
@@ -40,7 +42,7 @@ public class HomeController {
 	
 	
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/home.do", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
@@ -56,20 +58,16 @@ public class HomeController {
 	
 	@RequestMapping(value = "/test.do", method = RequestMethod.GET)
 	public String test(Model model, HttpServletRequest request) {
-		
-		
-		
+	
 		if(request.getParameter("pages") != null) {
 			currentPageNo = Integer.parseInt(request.getParameter("pages"));
 		}
 		if(request.getParameter("lines") != null) {
 			recordsPerPage = Integer.parseInt(request.getParameter("lines"));
 		}
-		
 		PagingDto paging = new PagingDto(recordsPerPage, currentPageNo);
 		int offset = (paging.getCurrentPageNo() - 1) * paging.getRecordsPerPage();
-		
-		
+			
 		List<ProductboardDto> list = biz.boardList(offset, paging.getRecordsPerPage());
 		paging.setNumberOfRecords(biz.getNoOfRecords());
 		paging.makePaging();
@@ -89,12 +87,12 @@ public class HomeController {
 			recordsPerPage = Integer.parseInt(request.getParameter("lines"));
 		}
 		
-		String searchFiled = request.getParameter("searchFiled");
-		String searchValue = request.getParameter("searchValue");
-		
 		PagingDto paging = new PagingDto(recordsPerPage, currentPageNo);
 		int offset = (paging.getCurrentPageNo() - 1) * paging.getRecordsPerPage();
-		
+
+		String searchFiled = request.getParameter("searchFiled");
+		String searchValue = request.getParameter("searchValue");
+
 		List<ProductboardDto> list = biz.searchFiled(offset, paging.getRecordsPerPage(), searchFiled, searchValue);
 		paging.setSearchFiled(searchFiled);
 		paging.setSearchValue(searchValue);
